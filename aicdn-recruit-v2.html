@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 爬蟲增量計劃 — 推薦商招募登記</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:      #0D1B3E;
+  --navy2:     #0A1628;
+  --navy3:     #111E40;
+  --blue:      #2563EB;
+  --cyan:      #06B6D4;
+  --cyan2:     #38BDF8;
+  --cyan-light:#E0F7FA;
+  --white:     #FFFFFF;
+  --gray-50:   #F8FAFC;
+  --gray-100:  #F1F5F9;
+  --gray-200:  #E2E8F0;
+  --gray-400:  #94A3B8;
+  --gray-600:  #475569;
+  --text:      #1E293B;
+  --text-m:    #64748B;
+  --gold:      #F59E0B;
+  --red:       #EF4444;
+  --purple:    #8B5CF6;
+  --green:     #10B981;
+  --r:         14px;
+  --r-lg:      20px;
+  --r-xl:      28px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--text);
+  background: var(--white);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+/* ── GRID BG UTILITY ── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(56,189,248,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56,189,248,0.07) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(10,22,40,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(56,189,248,0.15);
+  padding: 0 56px;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.nav-logo-box {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: linear-gradient(135deg, #2563EB, #06B6D4);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 15px; color: white;
+}
+.nav-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600; font-size: 15px; color: white;
+}
+.nav-btn {
+  background: linear-gradient(90deg, #06B6D4, #38BDF8);
+  color: white; text-decoration: none;
+  padding: 9px 22px; border-radius: 100px;
+  font-size: 13px; font-weight: 600;
+  transition: opacity .2s;
+}
+.nav-btn:hover { opacity: .85; }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  background: var(--navy2);
+  padding: 120px 56px 80px;
+  display: flex; align-items: center;
+  position: relative; overflow: hidden;
+}
+#hero .grid-bg {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.hero-glow1 {
+  position: absolute;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 65%);
+  top: -200px; left: -150px; pointer-events: none;
+}
+.hero-glow2 {
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(6,182,212,0.13) 0%, transparent 65%);
+  bottom: -100px; right: 200px; pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 1200px; margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1fr 420px;
+  gap: 64px; align-items: center;
+  position: relative;
+}
+
+/* left */
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(56,189,248,0.1);
+  border: 1px solid rgba(56,189,248,0.3);
+  color: var(--cyan2);
+  padding: 6px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 500; margin-bottom: 28px;
+}
+.badge-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--cyan2);
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.hero-h1 {
+  font-size: clamp(34px, 4.5vw, 60px);
+  font-weight: 900; color: white;
+  line-height: 1.1; letter-spacing: -.025em;
+  margin-bottom: 24px;
+}
+.hero-h1 .cyan { color: var(--cyan); }
+
+.hero-p {
+  font-size: 15px; color: rgba(255,255,255,.55);
+  line-height: 1.9; margin-bottom: 36px;
+  max-width: 500px;
+}
+
+.hero-cta-row {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.btn-hero {
+  background: linear-gradient(90deg, #06B6D4, #38BDF8);
+  color: white; text-decoration: none;
+  padding: 14px 32px; border-radius: 12px;
+  font-size: 16px; font-weight: 700;
+  box-shadow: 0 4px 24px rgba(6,182,212,.4);
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(6,182,212,.5); }
+.hero-note { font-size: 12px; color: rgba(255,255,255,.3); margin-top: 4px; }
+
+/* right card */
+.hero-card {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(56,189,248,.2);
+  border-radius: var(--r-xl);
+  padding: 32px;
+  backdrop-filter: blur(8px);
+}
+.hero-card-top {
+  display: flex; align-items: flex-start; gap: 20px;
+  margin-bottom: 24px;
+}
+.hero-core-icon {
+  width: 72px; height: 72px; border-radius: 18px;
+  background: linear-gradient(135deg, #1E40AF, #0891B2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(6,182,212,.3);
+}
+.hero-core-icon svg { width: 38px; height: 38px; }
+.core-label {
+  font-size: 10px; color: var(--cyan2); font-weight: 600;
+  letter-spacing: .1em; margin-top: 6px; text-align: center;
+}
+.hero-card-info { flex: 1; }
+.hero-card-title {
+  font-size: 18px; font-weight: 800; color: white; margin-bottom: 4px;
+}
+.hero-card-badge {
+  display: inline-block; background: var(--gold); color: #1a1a1a;
+  padding: 2px 10px; border-radius: 6px;
+  font-size: 10px; font-weight: 700; margin-bottom: 10px;
+  font-family: 'Space Grotesk', sans-serif; letter-spacing: .05em;
+}
+.hero-card-desc { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.8; }
+.hero-card-desc em { color: var(--cyan2); font-style: normal; font-weight: 600; }
+
+.hero-card-bottom {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  border-top: 1px solid rgba(255,255,255,.08); padding-top: 20px;
+}
+.hcb-item {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(56,189,248,.15);
+  border-radius: 12px; padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hcb-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(6,182,212,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.hcb-label { font-size: 11px; color: rgba(255,255,255,.4); }
+.hcb-val { font-size: 13px; font-weight: 700; color: white; }
+
+/* ── PAIN ── */
+#pain { padding: 100px 56px; background: var(--gray-50); }
+.pain-inner { max-width: 1120px; margin: 0 auto; }
+.sec-center { text-align: center; }
+.sec-h2 {
+  font-size: clamp(26px,3.5vw,40px); font-weight: 900;
+  letter-spacing: -.02em; margin-bottom: 10px;
+}
+.sec-sub { font-size: 15px; color: var(--text-m); }
+
+.pain-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 24px; margin-top: 56px;
+}
+.pain-card {
+  background: white; border-radius: var(--r-lg);
+  border: 1px solid var(--gray-200);
+  padding: 32px 28px;
+}
+.pain-icon-box {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin-bottom: 20px;
+}
+.pain-icon-box.red   { background: #FEF2F2; }
+.pain-icon-box.amber { background: #FFFBEB; }
+.pain-icon-box.gray  { background: #F8FAFC; }
+.pain-title { font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+.pain-desc { font-size: 14px; color: var(--text-m); line-height: 1.85; }
+
+/* ── HOW ── */
+#how {
+  padding: 100px 56px;
+  background: var(--navy2);
+  position: relative; overflow: hidden;
+}
+#how .grid-bg { position: absolute; inset: 0; pointer-events: none; }
+.how-inner { max-width: 1120px; margin: 0 auto; position: relative; }
+.how-tag {
+  display: inline-flex; align-items: center;
+  background: rgba(56,189,248,.12);
+  border: 1px solid rgba(56,189,248,.3);
+  color: var(--cyan2); padding: 5px 14px; border-radius: 100px;
+  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  margin-bottom: 20px;
+}
+.how-h2 { font-size: clamp(28px,4vw,48px); font-weight: 900; color: white; letter-spacing: -.025em; margin-bottom: 12px; }
+.how-sub { font-size: 15px; color: rgba(255,255,255,.45); margin-bottom: 56px; }
+
+/* feature row */
+.feature-row {
+  display: grid; grid-template-columns: 1fr 440px;
+  gap: 64px; align-items: center; margin-bottom: 80px;
+}
+.feature-row.rev { direction: rtl; }
+.feature-row.rev > * { direction: ltr; }
+
+.feature-tag {
+  display: inline-block;
+  background: rgba(56,189,248,.12);
+  border: 1px solid rgba(56,189,248,.25);
+  color: var(--cyan2); padding: 4px 12px; border-radius: 6px;
+  font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  margin-bottom: 20px;
+}
+.feature-h3 {
+  font-size: clamp(24px,3vw,36px); font-weight: 900;
+  color: white; line-height: 1.2; margin-bottom: 28px;
+  letter-spacing: -.02em;
+}
+.feature-points { display: flex; flex-direction: column; gap: 20px; }
+.fp {
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.fp-icon {
+  width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.fp-icon.blue   { background: rgba(37,99,235,.25); }
+.fp-icon.cyan   { background: rgba(6,182,212,.25); }
+.fp-icon.teal   { background: rgba(6,182,212,.35); }
+.fp-content {}
+.fp-title { font-size: 15px; font-weight: 700; color: white; margin-bottom: 3px; }
+.fp-title .pill {
+  display: inline-block; background: var(--cyan2); color: var(--navy2);
+  padding: 1px 10px; border-radius: 100px; font-size: 12px;
+  font-weight: 700; margin-left: 8px; vertical-align: middle;
+}
+.fp-desc { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.85; }
+
+/* mock phone */
+.phone-mock {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 28px; overflow: hidden;
+  padding: 20px 16px;
+}
+.phone-ad-block {
+  background: rgba(255,255,255,.08);
+  border-radius: 12px; padding: 16px;
+  display: flex; align-items: center; justify-content: center;
+  height: 100px; margin-bottom: 14px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px; font-weight: 700; color: rgba(255,255,255,.2);
+  border: 1px dashed rgba(255,255,255,.12);
+}
+.phone-lines { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.phone-line {
+  height: 10px; border-radius: 6px;
+  background: rgba(255,255,255,.1);
+}
+.phone-line.w100{width:100%} .phone-line.w80{width:80%}
+.phone-line.w60{width:60%}   .phone-line.w90{width:90%}
+.phone-cta {
+  background: linear-gradient(90deg,#06B6D4,#38BDF8);
+  border-radius: 10px; padding: 13px;
+  text-align: center; font-size: 14px; font-weight: 700; color: white;
+  margin-bottom: 14px;
+}
+.phone-badge-label {
+  position: absolute; top: 0; right: 0;
+  background: var(--gold); color: #1a1a1a;
+  padding: 4px 12px; border-radius: 0 0 0 12px;
+  font-size: 11px; font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.phone-wrap { position: relative; }
+.timer-row {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.06); border-radius: 10px; padding: 10px 14px;
+}
+.timer-circle {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid var(--green); display: flex; align-items: center;
+  justify-content: center; font-size: 11px; font-weight: 700; color: white;
+  font-family: 'Space Grotesk', sans-serif; flex-shrink: 0;
+}
+.timer-info { flex: 1; }
+.timer-label { font-size: 11px; color: rgba(255,255,255,.4); }
+.timer-val { font-size: 16px; font-weight: 700; color: var(--green);
+  font-family: 'Space Grotesk', sans-serif; }
+
+/* tech diagram */
+.tech-diagram {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(56,189,248,.2);
+  border-radius: 20px; padding: 32px;
+}
+.tech-flow {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; margin-bottom: 24px;
+}
+.tech-node {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.tech-box {
+  width: 72px; height: 72px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: white;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.tech-box.doc {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  font-size: 28px;
+}
+.tech-box.core {
+  background: linear-gradient(135deg, #1E3A8A, #0E7490);
+  border: 2px solid var(--cyan2);
+  box-shadow: 0 0 30px rgba(6,182,212,.3);
+  font-size: 11px; line-height: 1.3; text-align: center;
+}
+.tech-box.bot {
+  background: rgba(139,92,246,.2);
+  border: 1px solid rgba(139,92,246,.4);
+  font-size: 26px;
+}
+.tech-node-label { font-size: 12px; color: rgba(255,255,255,.6); text-align: center; }
+.tech-node-sub { font-size: 10px; color: rgba(255,255,255,.3); }
+.tech-arrow {
+  flex: 1; height: 2px; background: linear-gradient(90deg, rgba(56,189,248,.3), rgba(56,189,248,.7), rgba(56,189,248,.3));
+  position: relative; margin: 0 8px;
+}
+.tech-arrow::after {
+  content: '▸'; position: absolute; right: -6px; top: -9px;
+  color: var(--cyan2); font-size: 16px;
+}
+.tech-metrics {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  border-top: 1px solid rgba(255,255,255,.08); padding-top: 20px;
+}
+.tm-item {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.04); border-radius: 10px; padding: 12px;
+}
+.tm-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.tm-icon.green { background: rgba(16,185,129,.2); }
+.tm-icon.purple { background: rgba(139,92,246,.2); }
+.tm-type { font-size: 9px; color: rgba(255,255,255,.35); letter-spacing: .08em; font-family: 'Space Grotesk',sans-serif; }
+.tm-val { font-size: 13px; font-weight: 700; color: white; }
+
+/* ── BENEFITS ── */
+#benefits { padding: 100px 56px; background: var(--gray-50); }
+.bene-inner { max-width: 1120px; margin: 0 auto; }
+.bene-grid {
+  display: grid; grid-template-columns: repeat(2,1fr);
+  gap: 24px; margin-top: 56px;
+}
+.bene-card {
+  background: white; border: 1px solid var(--gray-200);
+  border-radius: var(--r-lg); padding: 32px;
+  transition: box-shadow .2s, border-color .2s;
+}
+.bene-card:hover { box-shadow: 0 8px 32px rgba(6,182,212,.12); border-color: #BAE6FD; }
+.bene-icon-box {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin-bottom: 18px;
+}
+.bene-icon-box.purple { background: #F3E8FF; }
+.bene-icon-box.blue   { background: #EFF6FF; }
+.bene-icon-box.cyan   { background: #ECFEFF; }
+.bene-icon-box.green  { background: #ECFDF5; }
+.bene-title { font-size: 17px; font-weight: 800; margin-bottom: 8px; }
+.bene-desc { font-size: 14px; color: var(--text-m); line-height: 1.85; margin-bottom: 16px; }
+.bene-checks { display: flex; flex-direction: column; gap: 6px; }
+.bene-check {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--text-m);
+}
+.bene-check::before { content: '✓'; color: var(--cyan); font-weight: 700; flex-shrink: 0; }
+
+/* ── COMMISSION ── */
+#commission {
+  padding: 100px 56px;
+  background: var(--navy2);
+  position: relative; overflow: hidden;
+}
+#commission .grid-bg { position: absolute; inset: 0; pointer-events: none; }
+.comm-inner { max-width: 1120px; margin: 0 auto; position: relative; }
+
+.tier-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 16px; margin-top: 56px;
+}
+.tier-card {
+  border: 1px solid rgba(56,189,248,.2);
+  border-radius: var(--r-lg);
+  padding: 28px 20px; text-align: center;
+  position: relative;
+  transition: border-color .25s;
+}
+.tier-card:hover { border-color: rgba(56,189,248,.5); }
+.tier-card.star {
+  border-color: var(--cyan2);
+  background: rgba(6,182,212,.05);
+}
+.tier-star-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(90deg, #06B6D4, #38BDF8);
+  color: white; padding: 3px 14px; border-radius: 100px;
+  font-size: 10px; font-weight: 700; letter-spacing: .05em; white-space: nowrap;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.tier-lv { font-size: 11px; color: rgba(255,255,255,.4); margin-bottom: 12px; font-weight: 600; letter-spacing: .06em; }
+.tier-pct {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 54px; font-weight: 700; color: var(--cyan2); line-height: 1;
+}
+.tier-pct sup { font-size: 24px; vertical-align: super; }
+.tier-sub { font-size: 12px; color: rgba(255,255,255,.3); margin-top: 6px; }
+.tier-range {
+  margin-top: 18px; padding-top: 18px;
+  border-top: 1px solid rgba(56,189,248,.12);
+  font-size: 12px; color: rgba(255,255,255,.4);
+}
+
+/* bonus banner */
+.bonus-banner {
+  margin-top: 40px;
+  background: linear-gradient(90deg, #1D4ED8 0%, #0891B2 50%, #38BDF8 100%);
+  border-radius: var(--r-lg); padding: 36px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 24px;
+}
+.bonus-left { display: flex; align-items: center; gap: 16px; }
+.bonus-crown { font-size: 36px; }
+.bonus-text-main { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.9); }
+.bonus-amount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px; font-weight: 700; color: white;
+}
+.bonus-amount span { font-size: 18px; }
+.bonus-cond { font-size: 13px; color: rgba(255,255,255,.7); margin-top: 2px; }
+
+/* ── FAQ ── */
+#faq { padding: 100px 56px; background: var(--gray-50); }
+.faq-inner { max-width: 780px; margin: 0 auto; }
+.faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 10px; }
+details.fq {
+  background: white; border: 1px solid var(--gray-200);
+  border-radius: var(--r); overflow: hidden;
+}
+details.fq[open] { border-color: #BAE6FD; }
+summary.fq-q {
+  padding: 20px 24px; cursor: pointer; list-style: none;
+  font-weight: 700; font-size: 15px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  user-select: none;
+}
+summary.fq-q::marker, summary.fq-q::-webkit-details-marker { display: none; }
+.fq-arr {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px;
+  background: var(--gray-100); display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--cyan); transition: transform .25s, background .2s;
+}
+details.fq[open] .fq-arr { transform: rotate(180deg); background: #ECFEFF; }
+.fq-a { padding: 0 24px 22px; font-size: 14px; color: var(--text-m); line-height: 1.9; }
+.fq-a a { color: var(--blue); text-decoration: none; }
+
+/* ── REGISTER ── */
+#register {
+  padding: 100px 56px;
+  background: var(--navy2);
+  position: relative; overflow: hidden;
+}
+#register .grid-bg { position: absolute; inset: 0; pointer-events: none; }
+.reg-glow {
+  position: absolute; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(37,99,235,.15) 0%, transparent 70%);
+  bottom: -200px; right: -100px; pointer-events: none;
+}
+.reg-inner { max-width: 1120px; margin: 0 auto; position: relative; }
+.reg-top { text-align: center; margin-bottom: 56px; }
+
+.form-box {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(56,189,248,.2);
+  border-radius: var(--r-xl); padding: 56px;
+  max-width: 780px; margin: 0 auto;
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.fg { display: flex; flex-direction: column; gap: 8px; }
+.fg.full { grid-column: 1 / -1; }
+label.fl {
+  font-size: 12px; font-weight: 600; letter-spacing: .05em;
+  color: rgba(255,255,255,.5);
+}
+label.fl .req { color: var(--cyan2); }
+input.fi, select.fi, textarea.fi {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(56,189,248,.2);
+  border-radius: 10px; padding: 12px 16px;
+  font-size: 14px; color: white;
+  font-family: 'Noto Sans TC', sans-serif;
+  width: 100%; outline: none;
+  transition: border-color .2s, background .2s;
+}
+input.fi::placeholder, textarea.fi::placeholder { color: rgba(255,255,255,.2); }
+input.fi:focus, select.fi:focus, textarea.fi:focus {
+  border-color: var(--cyan2);
+  background: rgba(6,182,212,.06);
+}
+select.fi option { background: var(--navy2); }
+textarea.fi { resize: vertical; min-height: 96px; }
+.check-row {
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.check-row input[type=checkbox] {
+  width: 16px; height: 16px; accent-color: var(--cyan); flex-shrink: 0; margin-top: 3px;
+}
+.check-row label { font-size: 13px; color: rgba(255,255,255,.4); font-weight: 400; letter-spacing: 0; }
+.check-row label a { color: var(--cyan2); text-decoration: none; }
+.submit-btn {
+  width: 100%; margin-top: 28px;
+  background: linear-gradient(90deg, #06B6D4, #38BDF8);
+  border: none; border-radius: 12px; padding: 16px;
+  font-size: 16px; font-weight: 700; color: white;
+  font-family: 'Noto Sans TC', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(6,182,212,.4);
+  transition: opacity .2s, transform .2s;
+}
+.submit-btn:hover { opacity: .9; transform: translateY(-1px); }
+.form-note-center { text-align: center; margin-top: 14px; font-size: 12px; color: rgba(255,255,255,.25); }
+
+.success-block { display: none; text-align: center; padding: 48px 0; }
+.success-block.show { display: block; }
+.suc-icon { font-size: 64px; margin-bottom: 16px; }
+.suc-h { font-size: 26px; font-weight: 900; color: white; margin-bottom: 8px; }
+.suc-p { font-size: 15px; color: rgba(255,255,255,.45); }
+.suc-p strong { color: var(--cyan2); }
+
+/* ── FOOTER ── */
+footer {
+  background: #06101F;
+  border-top: 1px solid rgba(56,189,248,.1);
+  padding: 36px 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.foot-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px; font-weight: 600; color: rgba(255,255,255,.4);
+}
+.foot-copy { font-size: 12px; color: rgba(255,255,255,.2); }
+.foot-link { color: rgba(255,255,255,.25); text-decoration: none; }
+.foot-link:hover { color: var(--cyan2); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 0 24px; }
+  #hero { padding: 100px 24px 60px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .hero-card { display: none; }
+  #pain, #how, #benefits, #commission, #faq, #register { padding: 72px 24px; }
+  .pain-grid { grid-template-columns: 1fr; }
+  .feature-row, .feature-row.rev { grid-template-columns: 1fr; direction: ltr; }
+  .phone-wrap { display: none; }
+  .bene-grid { grid-template-columns: 1fr; }
+  .tier-grid { grid-template-columns: 1fr 1fr; }
+  .form-box { padding: 32px 24px; }
+  .form-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; padding: 28px 24px; }
+  .bonus-banner { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">
+    <div class="nav-logo-box">S</div>
+    <span class="nav-name">SkyCloud 騰雲運算</span>
+  </a>
+  <a href="#register" class="nav-btn">立即申請成為推薦商 →</a>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="grid-bg"></div>
+  <div class="hero-glow1"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-inner">
+    <!-- Left -->
+    <div>
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        AI 爬蟲增量推薦商招募計畫正式啟動
+      </div>
+      <h1 class="hero-h1">
+        成為推薦商，<br>
+        賺進 <span class="cyan">持續被動收入</span>！
+      </h1>
+      <p class="hero-p">
+        AI 搜尋時代全面來臨，每個品牌都迫切需要 AI 爬蟲流量增量服務。<br>
+        加入 SkyCloud 推薦商計劃，協助客戶搶佔 AI 搜尋先機，<br>
+        同時建立您的長期穩定收入流。
+      </p>
+      <div class="hero-cta-row">
+        <a href="#register" class="btn-hero">立即登記申請推薦商 →</a>
+      </div>
+      <p class="hero-note">* 完全免費加入 · 24 小時內審核回覆 · 終身持續佣金</p>
+    </div>
+
+    <!-- Right Card -->
+    <div class="hero-card">
+      <div class="hero-card-top">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <div class="hero-core-icon">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="16" stroke="#38BDF8" stroke-width="2" opacity=".5"/>
+              <circle cx="20" cy="20" r="10" stroke="#38BDF8" stroke-width="2.5"/>
+              <circle cx="20" cy="20" r="4.5" fill="#38BDF8"/>
+              <path d="M20 4 C20 4 26 12 26 20 C26 28 20 36 20 36" stroke="#38BDF8" stroke-width="1.5" opacity=".4"/>
+              <path d="M20 4 C20 4 14 12 14 20 C14 28 20 36 20 36" stroke="#38BDF8" stroke-width="1.5" opacity=".4"/>
+            </svg>
+          </div>
+          <div class="core-label">CORE TECH</div>
+        </div>
+        <div class="hero-card-info">
+          <div class="hero-card-badge">New Standard</div>
+          <div class="hero-card-title">AI 爬蟲增量技術</div>
+          <div class="hero-card-desc">
+            告別傳統 SEO 限制。我們的 G.A.D. 核心技術，<br>
+            讓客戶內容被 <em>ChatGPT、Gemini</em> 等 AI 引擎<br>
+            持續引用，帶來真實增量流量。
+          </div>
+        </div>
+      </div>
+      <div class="hero-card-bottom">
+        <div class="hcb-item">
+          <div class="hcb-icon">🤖</div>
+          <div>
+            <div class="hcb-label">技術核心</div>
+            <div class="hcb-val">AI 爬蟲優化</div>
+          </div>
+        </div>
+        <div class="hcb-item">
+          <div class="hcb-icon">💰</div>
+          <div>
+            <div class="hcb-label">推薦佣金</div>
+            <div class="hcb-val">最高 30%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PAIN ═══ -->
+<section id="pain">
+  <div class="pain-inner">
+    <div class="sec-center">
+      <h2 class="sec-h2">您的客戶正面臨這些困境嗎？</h2>
+      <p class="sec-sub">AI 搜尋時代改寫流量規則，傳統 SEO 正在失效，客戶迫切需要新解法。</p>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon-box red">📉</div>
+        <div class="pain-title">AI 搜尋搶走流量</div>
+        <div class="pain-desc">ChatGPT、Gemini 直接回答用戶問題，傳統網站自然流量持續下滑，Google 排名紅利消失，收入隨之大減。</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon-box amber">🔍</div>
+        <div class="pain-title">內容不被 AI 引用</div>
+        <div class="pain-desc">即使有優質內容，AI 引擎卻不知道您的網站存在。缺乏 AI 爬蟲優化，內容無法被 ChatGPT 等工具引用推薦。</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon-box gray">🏆</div>
+        <div class="pain-title">競爭對手搶先布局</div>
+        <div class="pain-desc">AI 搜尋市場先機稍縱即逝。沒有搶先建立 AI 可見度的品牌，將在新一輪流量競爭中被對手遠遠甩開。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW (Features) ═══ -->
+<section id="how">
+  <div class="grid-bg"></div>
+  <div class="how-inner">
+    <div class="how-tag">核心服務</div>
+    <h2 class="how-h2">我們提供什麼給您的客戶？</h2>
+    <p class="how-sub">G.A.D. 獨家技術支持，讓客戶內容被 AI 看見，為您帶來持續推薦佣金。</p>
+
+    <!-- Feature 1 -->
+    <div class="feature-row">
+      <div>
+        <div class="feature-tag">核心服務 01</div>
+        <h3 class="feature-h3">AI 爬蟲優化 CDN：<br>讓內容被 AI 主動抓取</h3>
+        <div class="feature-points">
+          <div class="fp">
+            <div class="fp-icon blue">⚡</div>
+            <div class="fp-content">
+              <div class="fp-title">AI 極速通道</div>
+              <div class="fp-desc">針對 ChatGPT、Gemini、Perplexity 等 AI 爬蟲進行友善優化，大幅提升內容被 AI 抓取與引用的機率。</div>
+            </div>
+          </div>
+          <div class="fp">
+            <div class="fp-icon cyan">🔗</div>
+            <div class="fp-content">
+              <div class="fp-title">自動化外鏈交換樞紐</div>
+              <div class="fp-desc">系統自動在高品質網站間建立高關聯連結 (Backlinks)，提升網站權重與 AI 信任度。</div>
+            </div>
+          </div>
+          <div class="fp">
+            <div class="fp-icon teal">🎯</div>
+            <div class="fp-content">
+              <div class="fp-title">AI 權重持續提升</div>
+              <div class="fp-desc">長期穩定的 AI 可見度建立，讓客戶在 AI 搜尋時代佔據先機，效果隨時間持續累積。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-diagram">
+        <div class="tech-flow">
+          <div class="tech-node">
+            <div class="tech-box doc">📄</div>
+            <div class="tech-node-label">您的網站內容</div>
+            <div class="tech-node-sub">Source</div>
+          </div>
+          <div class="tech-arrow"></div>
+          <div class="tech-node">
+            <div class="tech-box core">G.A.D.<br><span style="font-size:9px;opacity:.7">CORE</span></div>
+            <div class="tech-node-label" style="color:var(--cyan2)">AI 優化核心</div>
+            <div class="tech-node-sub">CDN + Link Exchange</div>
+          </div>
+          <div class="tech-arrow"></div>
+          <div class="tech-node">
+            <div class="tech-box bot">🤖</div>
+            <div class="tech-node-label">AI &amp; 搜尋引擎</div>
+            <div class="tech-node-sub">ChatGPT / Gemini</div>
+          </div>
+        </div>
+        <div class="tech-metrics">
+          <div class="tm-item">
+            <div class="tm-icon green">⚡</div>
+            <div>
+              <div class="tm-type">SPEED</div>
+              <div class="tm-val">AI 極速通道</div>
+            </div>
+          </div>
+          <div class="tm-item">
+            <div class="tm-icon purple">🔀</div>
+            <div>
+              <div class="tm-type">VISIBILITY</div>
+              <div class="tm-val">AI 權重提升</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 2 -->
+    <div class="feature-row rev">
+      <div>
+        <div class="feature-tag">核心服務 02</div>
+        <h3 class="feature-h3">全方位推薦商<br>支援系統</h3>
+        <div class="feature-points">
+          <div class="fp">
+            <div class="fp-icon blue">📊</div>
+            <div class="fp-content">
+              <div class="fp-title">即時追蹤後台</div>
+              <div class="fp-desc">專屬推薦商後台，即時查看點擊數、轉換率與佣金收益，所有數據透明呈現。</div>
+            </div>
+          </div>
+          <div class="fp">
+            <div class="fp-icon cyan">🎨</div>
+            <div class="fp-content">
+              <div class="fp-title">完整行銷素材庫</div>
+              <div class="fp-desc">提供簡報、說明文件、社群素材，讓您快速開始推廣，無需自行準備任何資料。</div>
+            </div>
+          </div>
+          <div class="fp">
+            <div class="fp-icon teal">🤝</div>
+            <div class="fp-content">
+              <div class="fp-title">時間變現<span class="pill">終身佣金</span></div>
+              <div class="fp-desc">客戶每月續訂，您每月持續收取佣金。建立真正的被動收入流，越推越賺。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone-mock" style="position:relative;">
+          <div class="phone-badge-label">推薦商後台</div>
+          <div style="height:20px;"></div>
+          <div class="phone-ad-block" style="background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);color:rgba(255,255,255,.3);font-size:14px;flex-direction:column;gap:4px;">
+            <div style="font-size:11px;color:rgba(255,255,255,.3);">本月佣金累計</div>
+            <div style="font-size:28px;font-weight:700;color:#38BDF8;font-family:'Space Grotesk',sans-serif;">$12,480</div>
+            <div style="font-size:11px;color:rgba(16,185,129,1);">▲ +23% vs 上月</div>
+          </div>
+          <div class="phone-lines">
+            <div class="phone-line w100"></div>
+            <div class="phone-line w80"></div>
+            <div class="phone-line w90"></div>
+            <div class="phone-line w60"></div>
+          </div>
+          <div class="timer-row">
+            <div class="timer-circle">30%</div>
+            <div class="timer-info">
+              <div class="timer-label">菁英推薦商佣金率</div>
+              <div class="timer-val">持續分潤中…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BENEFITS ═══ -->
+<section id="benefits">
+  <div class="bene-inner">
+    <div class="sec-center">
+      <h2 class="sec-h2">不只是佣金，更是全方位的合作夥伴關係</h2>
+      <p class="sec-sub">我們提供完整的推薦商支援體系，讓您專注推廣，其餘交給我們。</p>
+    </div>
+    <div class="bene-grid">
+      <div class="bene-card">
+        <div class="bene-icon-box purple">💎</div>
+        <div class="bene-title">業界最高佣金結構</div>
+        <div class="bene-desc">採分級制度，依推薦量晉升等級，最高可達月費 30% 的持續性佣金。客戶每月續費，您每月穩定入帳。</div>
+        <div class="bene-checks">
+          <div class="bene-check">最高 30% 持續佣金</div>
+          <div class="bene-check">客戶續費即繼續分潤</div>
+          <div class="bene-check">每月定期結算匯款</div>
+        </div>
+      </div>
+      <div class="bene-card">
+        <div class="bene-icon-box blue">📈</div>
+        <div class="bene-title">QA 原生推薦廣告支援</div>
+        <div class="bene-desc">「標題即廣告」系統讓您的客戶內容自動媒合商機。AI 自動引入高關聯廣告問答，為客戶創造額外收益，提升您的續約率。</div>
+        <div class="bene-checks">
+          <div class="bene-check">每次創作都具備即時變現力</div>
+          <div class="bene-check">AI 智能精準媒合，無須手動招商</div>
+        </div>
+      </div>
+      <div class="bene-card">
+        <div class="bene-icon-box cyan">🔀</div>
+        <div class="bene-title">R.T. 定向廣告數據變現</div>
+        <div class="bene-desc">「受眾包長期分潤，建立被動收入數據金礦」。累積讀者閱讀軌跡，廣告主再行銷時，推薦商客戶同享紅利。</div>
+        <div class="bene-checks">
+          <div class="bene-check">被動收入持續累積</div>
+          <div class="bene-check">建立自有數據庫（受眾包）</div>
+        </div>
+      </div>
+      <div class="bene-card">
+        <div class="bene-icon-box green">🚀</div>
+        <div class="bene-title">藍海市場先機紅利</div>
+        <div class="bene-desc">AI 搜尋正在改寫流量規則，市場空白巨大。早期推薦商享有更多先機，搶先建立客戶群，享受市場教育完成後的爆發紅利。</div>
+        <div class="bene-checks">
+          <div class="bene-check">0 元門檻免費加入</div>
+          <div class="bene-check">24 小時審核回覆</div>
+          <div class="bene-check">1 對 1 業務夥伴支援</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMMISSION ═══ -->
+<section id="commission">
+  <div class="grid-bg"></div>
+  <div class="comm-inner">
+    <div class="how-tag">佣金方案</div>
+    <h2 class="how-h2">分級佣金，越推越高</h2>
+    <p class="how-sub">根據每月成功推薦數量自動晉升等級，佣金比例同步提升，沒有上限。</p>
+
+    <div class="tier-grid">
+      <div class="tier-card">
+        <div class="tier-lv">入門推薦商</div>
+        <div class="tier-pct"><sup>%</sup>15</div>
+        <div class="tier-sub">持續訂閱佣金</div>
+        <div class="tier-range">每月成交 1–3 個客戶</div>
+      </div>
+      <div class="tier-card">
+        <div class="tier-lv">進階推薦商</div>
+        <div class="tier-pct"><sup>%</sup>22</div>
+        <div class="tier-sub">持續訂閱佣金</div>
+        <div class="tier-range">每月成交 4–9 個客戶</div>
+      </div>
+      <div class="tier-card star">
+        <div class="tier-star-badge">⭐ 最高等級</div>
+        <div class="tier-lv">菁英推薦商</div>
+        <div class="tier-pct"><sup>%</sup>30</div>
+        <div class="tier-sub">持續訂閱佣金</div>
+        <div class="tier-range">每月成交 10+ 個客戶</div>
+      </div>
+      <div class="tier-card">
+        <div class="tier-lv">企業代理夥伴</div>
+        <div class="tier-pct" style="font-size:36px;color:var(--gold);">客製</div>
+        <div class="tier-sub" style="color:var(--gold);">量身訂制分潤方案</div>
+        <div class="tier-range">大量或企業合作請洽談</div>
+      </div>
+    </div>
+
+    <!-- Bonus Banner -->
+    <div class="bonus-banner">
+      <div class="bonus-left">
+        <div class="bonus-crown">👑</div>
+        <div>
+          <div class="bonus-text-main">加碼獎金計畫</div>
+          <div class="bonus-amount"><span>$</span>10,000 元獎金</div>
+          <div class="bonus-cond">每月累積推薦客戶達 10 位，額外獲得一次性獎勵</div>
+        </div>
+      </div>
+      <a href="#register" class="btn-hero" style="white-space:nowrap;">立即申請搶先加入 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section id="faq">
+  <div class="faq-inner">
+    <div class="sec-center">
+      <h2 class="sec-h2">推薦商常見問題</h2>
+      <p class="sec-sub">還有疑問？歡迎透過登記表單留下資訊，我們將主動聯繫說明。</p>
+    </div>
+    <div class="faq-list">
+      <details class="fq">
+        <summary class="fq-q">成為推薦商需要什麼資格或費用？<span class="fq-arr">▾</span></summary>
+        <p class="fq-a">完全免費，無需支付任何加盟費或保證金。我們歡迎任何有意願推廣的個人或企業申請，包括行銷顧問、數位代理商、自媒體創作者、業務顧問或對 AI 行銷有興趣的任何人。</p>
+      </details>
+      <details class="fq">
+        <summary class="fq-q">佣金如何計算？什麼時候入帳？<span class="fq-arr">▾</span></summary>
+        <p class="fq-a">當您推薦的客戶成功訂閱任意方案，您將獲得該方案月費的相應百分比作為佣金。只要客戶持續訂閱，您每個月都持續獲得佣金。結算週期為每月底，次月 15 日前匯款至指定帳戶。</p>
+      </details>
+      <details class="fq">
+        <summary class="fq-q">推薦追蹤 Cookie 有效期多長？<span class="fq-arr">▾</span></summary>
+        <p class="fq-a">推薦連結的 Cookie 有效期為 90 天。只要客戶在點擊您的連結後 90 天內完成訂閱，即計入您的佣金紀錄，無需擔心時間壓力。</p>
+      </details>
+      <details class="fq">
+        <summary class="fq-q">AI 爬蟲增量服務的完整說明在哪裡？<span class="fq-arr">▾</span></summary>
+        <p class="fq-a">完整產品介紹請參考主站 <a href="http://www.aicdn.ai" target="_blank">www.aicdn.ai</a>。審核通過後，我們也將提供詳細的推薦商產品說明文件與銷售腳本，協助您快速掌握銷售重點。</p>
+      </details>
+      <details class="fq">
+        <summary class="fq-q">我需要自行處理技術支援或售後服務嗎？<span class="fq-arr">▾</span></summary>
+        <p class="fq-a">完全不需要。您負責推廣介紹，所有技術支援、帳號管理、客服問題均由 SkyCloud 騰雲運算負責處理。您專注在開發新客戶，售後我們全包。</p>
+      </details>
+      <details class="fq">
+        <summary class="fq-q">一個推薦商可以服務多少客戶？有上限嗎？<span class="fq-arr">▾</span></summary>
+        <p class="fq-a">沒有上限。推薦客戶數量越多，累計佣金越高，同時還能晉升更高等級享有更高佣金比例。對於大量合作需求，可洽談客製化代理商方案。</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ REGISTER ═══ -->
+<section id="register">
+  <div class="grid-bg"></div>
+  <div class="reg-glow"></div>
+  <div class="reg-inner">
+    <div class="reg-top">
+      <div class="how-tag" style="display:inline-flex;margin-bottom:16px;">立即申請</div>
+      <h2 class="how-h2">填寫推薦商登記表</h2>
+      <p class="how-sub" style="margin:0 auto;max-width:520px;">填寫以下資料，我們將在 24 小時內與您聯繫確認合作細節</p>
+    </div>
+
+    <div class="form-box">
+      <div id="form-body">
+        <form id="reg-form" onsubmit="doSubmit(event)">
+          <div class="form-grid">
+
+            <div class="fg">
+              <label class="fl">姓名 <span class="req">*</span></label>
+              <input class="fi" type="text" name="name" placeholder="您的姓名" required>
+            </div>
+            <div class="fg">
+              <label class="fl">公司 / 組織名稱</label>
+              <input class="fi" type="text" name="company" placeholder="（選填）">
+            </div>
+            <div class="fg">
+              <label class="fl">聯絡電話 <span class="req">*</span></label>
+              <input class="fi" type="tel" name="phone" placeholder="+886 912 345 678" required>
+            </div>
+            <div class="fg">
+              <label class="fl">電子郵件 <span class="req">*</span></label>
+              <input class="fi" type="email" name="email" placeholder="you@example.com" required>
+            </div>
+            <div class="fg full">
+              <label class="fl">您的行業背景 <span class="req">*</span></label>
+              <select class="fi" name="industry" required>
+                <option value="" disabled selected>請選擇最符合的類別</option>
+                <option>數位行銷 / 廣告代理商</option>
+                <option>SEO / 內容行銷顧問</option>
+                <option>網路自媒體 / KOL / 部落客</option>
+                <option>企業業務 / 業務顧問</option>
+                <option>電商 / 品牌經營者</option>
+                <option>IT 服務 / 系統整合商</option>
+                <option>個人推廣者</option>
+                <option>其他</option>
+              </select>
+            </div>
+            <div class="fg full">
+              <label class="fl">預計推廣的目標客群</label>
+              <input class="fi" type="text" name="target" placeholder="例如：中小型電商品牌、餐飲業、本地服務業…">
+            </div>
+            <div class="fg full">
+              <label class="fl">您有哪些推廣管道或資源？</label>
+              <textarea class="fi" name="channels" placeholder="例如：LINE 群組、FB 社團、個人粉絲頁、部落格、業務人脈…"></textarea>
+            </div>
+            <div class="fg full">
+              <div class="check-row">
+                <input type="checkbox" id="agree" name="agree" required>
+                <label for="agree">我已閱讀並同意 <a href="#">推薦商合作條款</a> 與 <a href="#">隱私權政策</a>，並授權 SkyCloud 騰雲運算聯繫我進行後續確認。</label>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">📨 送出推薦商申請</button>
+          <p class="form-note-center">資料僅供合作審核使用，我們承諾不會外流您的個人資訊</p>
+        </form>
+      </div>
+
+      <div class="success-block" id="suc">
+        <div class="suc-icon">✅</div>
+        <div class="suc-h">申請已成功送出！</div>
+        <div class="suc-p">感謝您申請成為 SkyCloud 推薦商夥伴<br>我們的團隊將在 <strong>24 小時內</strong> 透過電話或 Email 與您聯繫</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-brand">SkyCloud 騰雲運算 — AI 爬蟲增量計劃</div>
+  <div class="foot-copy">© 2025 SkyCloud Technology. All rights reserved. &nbsp;|&nbsp; <a href="http://www.aicdn.ai" target="_blank" class="foot-link">主要網站</a></div>
+</footer>
+
+<script>
+function doSubmit(e) {
+  e.preventDefault();
+  const fb = document.getElementById('form-body');
+  const sc = document.getElementById('suc');
+  fb.style.transition = 'opacity .35s';
+  fb.style.opacity = '0';
+  setTimeout(() => { fb.style.display = 'none'; sc.classList.add('show'); }, 350);
+}
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href').slice(1);
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior:'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
